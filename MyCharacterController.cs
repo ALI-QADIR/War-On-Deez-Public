@@ -92,6 +92,7 @@ namespace Assets.Scripts
         private bool _doubleJumpConsumed = false;
         private bool _canWallJump = false;
         private Vector3 _wallJumpNormal;
+        private Vector3 _internalVelocityAdd = Vector3.zero;
 
         #endregion private variables
 
@@ -101,8 +102,12 @@ namespace Assets.Scripts
             motor.CharacterController = this;
         }
 
+        /// <summary>
+        /// This is called every frame by MyPlayer in order to tell the character what its inputs are
+        /// </summary>
         public void SetInputs(ref PlayerCharacterInputs inputs)
         {
+            // Clamp input
             Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(inputs.MoveAxisRight, 0f, inputs.MoveAxisForward), 1f);
 
             // Calculate camera direction and rotation on the character plane
@@ -125,10 +130,19 @@ namespace Assets.Scripts
             }
         }
 
+        /// <summary>
+        /// (Called by KinematicCharacterMotor during its update cycle)
+        /// This is called before the character begins its movement update
+        /// </summary>
         public void BeforeCharacterUpdate(float deltaTime)
         {
         }
 
+        /// <summary>
+        /// (Called by KinematicCharacterMotor during its update cycle)
+        /// This is where you tell your character what its rotation should be right now.
+        /// This is the ONLY place where you should set the character's rotation
+        /// </summary>
         public void UpdateRotation(ref Quaternion currentRotation, float deltaTime)
         {
             if (_lookInputVector != Vector3.zero && orientationSharpness > 0f)
@@ -141,6 +155,11 @@ namespace Assets.Scripts
             }
         }
 
+        /// <summary>
+        /// (Called by KinematicCharacterMotor during its update cycle)
+        /// This is where you tell your character what its velocity should be right now.
+        /// This is the ONLY place where you can set the character's velocity
+        /// </summary>
         public void UpdateVelocity(ref Vector3 currentVelocity, float deltaTime)
         {
             Vector3 targetMovementVelocity = Vector3.zero;
@@ -167,8 +186,8 @@ namespace Assets.Scripts
                     // Prevent climbing on un-stable slopes with air movement
                     if (motor.GroundingStatus.FoundAnyGround)
                     {
-                        Vector3 perpendicularObstructionNormal = Vector3.Cross(Vector3.Cross(motor.CharacterUp, motor.GroundingStatus.GroundNormal), motor.CharacterUp).normalized;
-                        targetMovementVelocity = Vector3.ProjectOnPlane(targetMovementVelocity, perpendicularObstructionNormal);
+                        Vector3 perpenticularObstructionNormal = Vector3.Cross(Vector3.Cross(motor.CharacterUp, motor.GroundingStatus.GroundNormal), motor.CharacterUp).normalized;
+                        targetMovementVelocity = Vector3.ProjectOnPlane(targetMovementVelocity, perpenticularObstructionNormal);
                     }
 
                     Vector3 velocityDiff = Vector3.ProjectOnPlane(targetMovementVelocity - currentVelocity, gravity);
@@ -233,12 +252,19 @@ namespace Assets.Scripts
                 // Reset wall jump
                 _canWallJump = false;
             }
+
+            // Take into account additive velocity
+            if (_internalVelocityAdd.sqrMagnitude > 0f)
+            {
+                currentVelocity += _internalVelocityAdd;
+                _internalVelocityAdd = Vector3.zero;
+            }
         }
 
-        public void PostGroundingUpdate(float deltaTime)
-        {
-        }
-
+        /// <summary>
+        /// (Called by KinematicCharacterMotor during its update cycle)
+        /// This is called after the character has finished its movement update
+        /// </summary>
         public void AfterCharacterUpdate(float deltaTime)
         {
             // Handle jump-related values
@@ -276,8 +302,7 @@ namespace Assets.Scripts
         {
         }
 
-        public void OnMovementHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint,
-            ref HitStabilityReport hitStabilityReport)
+        public void OnMovementHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
         {
             // We can wall jump only if we are not stable on ground and are moving against an obstruction
             if (allowWallJump && !motor.GroundingStatus.IsStableOnGround && !hitStabilityReport.IsStable)
@@ -287,13 +312,40 @@ namespace Assets.Scripts
             }
         }
 
-        public void ProcessHitStabilityReport(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition,
-            Quaternion atCharacterRotation, ref HitStabilityReport hitStabilityReport)
+        public void ProcessHitStabilityReport(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, Vector3 atCharacterPosition, Quaternion atCharacterRotation, ref HitStabilityReport hitStabilityReport)
         {
+        }
+
+        public void AddVelocity(Vector3 velocity)
+        {
+            _internalVelocityAdd += velocity;
         }
 
         public void OnDiscreteCollisionDetected(Collider hitCollider)
         {
+        }
+
+        public void PostGroundingUpdate(float deltaTime)
+        {
+            // Handle landing and leaving ground
+            if (motor.GroundingStatus.IsStableOnGround && !motor.LastGroundingStatus.IsStableOnGround)
+            {
+                OnLanded();
+            }
+            else if (!motor.GroundingStatus.IsStableOnGround && motor.LastGroundingStatus.IsStableOnGround)
+            {
+                OnLeaveStableGround();
+            }
+        }
+
+        protected void OnLanded()
+        {
+            Debug.Log("Landed");
+        }
+
+        protected void OnLeaveStableGround()
+        {
+            Debug.Log("Left ground");
         }
     }
 }

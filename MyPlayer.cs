@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using KinematicCharacterController;
 using Assets.Scripts;
+using UnityEngine.TextCore.Text;
 
 namespace Assets.Scripts
 {
@@ -31,6 +32,14 @@ namespace Assets.Scripts
             characterInputs.JumpDown = _inputManager.jumpInput;
 
             character.SetInputs(ref characterInputs);
+
+            // when Q is pressed the character will jump backwards
+            // use this logic for dodge
+            /*if (Input.GetKeyDown(KeyCode.Q))
+            {
+                character.motor.ForceUnground(0.1f);
+                character.AddVelocity(-Camera.main.transform.forward * 10);
+            }*/
         }
     }
 }
