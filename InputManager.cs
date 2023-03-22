@@ -10,6 +10,8 @@ public class InputManager : MonoBehaviour
     [HideInInspector] public float horizontalInput;
     [HideInInspector] public float verticalInput;
 
+    [HideInInspector] public bool jumpInput;
+
     private InputActions _inputActions;
 
     private void Awake()
@@ -19,6 +21,9 @@ public class InputManager : MonoBehaviour
         _inputActions.Player.Move.started += OnMovementInput;
         _inputActions.Player.Move.performed += OnMovementInput;
         _inputActions.Player.Move.canceled += OnMovementInput;
+
+        _inputActions.Player.Jump.started += OnJumpInput;
+        _inputActions.Player.Jump.canceled += OnJumpInput;
     }
 
     private void OnMovementInput(InputAction.CallbackContext context)
@@ -26,6 +31,11 @@ public class InputManager : MonoBehaviour
         moveInput = context.ReadValue<Vector2>();
         horizontalInput = moveInput.x;
         verticalInput = moveInput.y;
+    }
+
+    private void OnJumpInput(InputAction.CallbackContext context)
+    {
+        jumpInput = context.ReadValueAsButton();
     }
 
     private void OnEnable()

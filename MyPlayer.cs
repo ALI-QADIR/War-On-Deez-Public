@@ -28,6 +28,7 @@ namespace Assets.Scripts
             characterInputs.MoveAxisForward = _inputManager.verticalInput;
             characterInputs.MoveAxisRight = _inputManager.horizontalInput;
             characterInputs.CameraRotation = Camera.main.transform.rotation;
+            characterInputs.JumpDown = _inputManager.jumpInput;
 
             character.SetInputs(ref characterInputs);
         }
