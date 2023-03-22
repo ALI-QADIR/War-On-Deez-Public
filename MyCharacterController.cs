@@ -72,11 +72,17 @@ namespace Assets.Scripts
         #region Miscellaneous variables
 
         [Header("Miscellaneous")]
+        [Tooltip("Should the player be oriented according to gravity acting on it?")]
+        public bool orientTowardsGravity = true;
+
         [Tooltip("Gravity acting on the character")]
         public Vector3 gravity = new Vector3(0, -30f, 0);
 
         [Tooltip("The root(feet) transform of the character")]
         public Transform meshRoot;
+
+        [Tooltip("List of ignored Colliders")]
+        public List<Collider> ignoredColliders = new List<Collider>();
 
         #endregion Miscellaneous variables
 
@@ -93,6 +99,9 @@ namespace Assets.Scripts
         private bool _canWallJump = false;
         private Vector3 _wallJumpNormal;
         private Vector3 _internalVelocityAdd = Vector3.zero;
+        /*private bool _shouldBeCrouching = false;
+        private bool _isCrouching = false;
+        private Collider[] _probedColliders = new Collider[8];*/
 
         #endregion private variables
 
@@ -128,6 +137,23 @@ namespace Assets.Scripts
                 _timeSinceJumpRequested = 0f;
                 _jumpRequested = true;
             }
+
+            // Crouching input
+            /*if (inputs.CrouchDown)
+            {
+                _shouldBeCrouching = true;
+
+                if (!_isCrouching)
+                {
+                    _isCrouching = true;
+                    Motor.SetCapsuleDimensions(0.5f, 1f, 0.5f);
+                    MeshRoot.localScale = new Vector3(1f, 0.5f, 1f);
+                }
+            }
+            else if (inputs.CrouchUp)
+            {
+                _shouldBeCrouching = false;
+            }*/
         }
 
         /// <summary>
@@ -152,6 +178,11 @@ namespace Assets.Scripts
 
                 // Set the current rotation (which will be used by the KinematicCharacterMotor)
                 currentRotation = Quaternion.LookRotation(smoothedLookInputDirection, motor.CharacterUp);
+            }
+
+            if (orientTowardsGravity)
+            {
+                currentRotation = Quaternion.FromToRotation((currentRotation * Vector3.up), -gravity) * currentRotation;
             }
         }
 
@@ -291,11 +322,32 @@ namespace Assets.Scripts
                     _timeSinceLastAbleToJump += deltaTime;
                 }
             }
+
+            // Handle uncrouching
+            /*if (_isCrouching && !_shouldBeCrouching)
+            {
+                // Do an overlap test with the character's standing height to see if there are any obstructions
+                Motor.SetCapsuleDimensions(0.5f, 2f, 1f);
+                if (Motor.CharacterCollisionsOverlap(
+                        Motor.TransientPosition,
+                        Motor.TransientRotation,
+                        _probedColliders) > 0)
+                {
+                    // If obstructions, just stick to crouching dimensions
+                    Motor.SetCapsuleDimensions(0.5f, 1f, 0.5f);
+                }
+                else
+                {
+                    // If no obstructions, uncrouch
+                    MeshRoot.localScale = new Vector3(1f, 1f, 1f);
+                    _isCrouching = false;
+                }
+            }*/
         }
 
         public bool IsColliderValidForCollisions(Collider coll)
         {
-            return true;
+            return !ignoredColliders.Contains(coll);
         }
 
         public void OnGroundHit(Collider hitCollider, Vector3 hitNormal, Vector3 hitPoint, ref HitStabilityReport hitStabilityReport)
