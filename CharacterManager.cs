@@ -41,7 +41,7 @@ namespace Assets.Scripts
                 _ => 0
             };
 
-            _animationManager.jumping = jumpDown;
+            _animationManager.jumping = _character.isJumping;
         }
 
         // Start is called before the first frame update

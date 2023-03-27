@@ -64,6 +64,8 @@ namespace Assets.Scripts
         [Tooltip("the extra time after leaving stable ground where you’ll still be allowed to jump")]
         public float jumpPostGroundingGraceTime = 0.1f;
 
+        [HideInInspector] public bool isJumping;
+
         #endregion Jumping variables
 
         #region Miscellaneous variables
@@ -496,12 +498,12 @@ namespace Assets.Scripts
 
         protected void OnLanded()
         {
-            Debug.Log("Landed");
+            isJumping = false;
         }
 
         protected void OnLeaveStableGround()
         {
-            Debug.Log("Left ground");
+            isJumping = true;
         }
     }
 }
