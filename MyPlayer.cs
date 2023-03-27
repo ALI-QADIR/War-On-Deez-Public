@@ -10,6 +10,7 @@ namespace Assets.Scripts
     public class MyPlayer : MonoBehaviour
     {
         public MyCharacterController character;
+        public CharacterManager characterManager;
 
         private InputManager _inputManager;
 
@@ -26,20 +27,13 @@ namespace Assets.Scripts
         private void HandleCharacterInput()
         {
             var characterInputs = new PlayerCharacterInputs();
-            characterInputs.MoveAxisForward = _inputManager.verticalInput;
-            characterInputs.MoveAxisRight = _inputManager.horizontalInput;
-            characterInputs.CameraRotation = Camera.main.transform.rotation;
-            characterInputs.JumpDown = _inputManager.jumpInput;
+            characterInputs.moveAxisForward = _inputManager.verticalInput;
+            characterInputs.moveAxisRight = _inputManager.horizontalInput;
+            characterInputs.cameraRotation = Camera.main.transform.rotation;
+            characterInputs.jumpDown = _inputManager.jumpInput;
 
             character.SetInputs(ref characterInputs);
-
-            // when Q is pressed the character will jump backwards
-            // use this logic for dodge
-            /*if (Input.GetKeyDown(KeyCode.Q))
-            {
-                character.motor.ForceUnground(0.1f);
-                character.AddVelocity(-Camera.main.transform.forward * 10);
-            }*/
+            characterManager.SetInputs(ref characterInputs);
         }
     }
 }

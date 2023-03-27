@@ -8,15 +8,7 @@ namespace Assets.Scripts
 {
     public enum CharacterState
     {
-        Default,
-    }
-
-    public struct PlayerCharacterInputs
-    {
-        public float MoveAxisForward;
-        public float MoveAxisRight;
-        public Quaternion CameraRotation;
-        public bool JumpDown;
+        DEFAULT,
     }
 
     public class MyCharacterController : MonoBehaviour, ICharacterController
@@ -119,7 +111,7 @@ namespace Assets.Scripts
             motor.CharacterController = this;
 
             // Handle initial state
-            TransitionToState(CharacterState.Default);
+            TransitionToState(CharacterState.DEFAULT);
         }
 
         /// <summary>
@@ -140,7 +132,7 @@ namespace Assets.Scripts
         {
             switch (state)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         break;
                     }
@@ -159,7 +151,7 @@ namespace Assets.Scripts
         {
             switch (state)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         break;
                     }
@@ -172,26 +164,26 @@ namespace Assets.Scripts
         public void SetInputs(ref PlayerCharacterInputs inputs)
         {
             // Clamp input
-            Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(inputs.MoveAxisRight, 0f, inputs.MoveAxisForward), 1f);
+            Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(inputs.moveAxisRight, 0f, inputs.moveAxisForward), 1f);
 
             // Calculate camera direction and rotation on the character plane
-            Vector3 cameraPlanarDirection = Vector3.ProjectOnPlane(inputs.CameraRotation * Vector3.forward, motor.CharacterUp).normalized;
+            Vector3 cameraPlanarDirection = Vector3.ProjectOnPlane(inputs.cameraRotation * Vector3.forward, motor.CharacterUp).normalized;
             if (cameraPlanarDirection.sqrMagnitude == 0f)
             {
-                cameraPlanarDirection = Vector3.ProjectOnPlane(inputs.CameraRotation * Vector3.up, motor.CharacterUp).normalized;
+                cameraPlanarDirection = Vector3.ProjectOnPlane(inputs.cameraRotation * Vector3.up, motor.CharacterUp).normalized;
             }
             Quaternion cameraPlanarRotation = Quaternion.LookRotation(cameraPlanarDirection, motor.CharacterUp);
 
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         // Move and look inputs
                         _moveInputVector = cameraPlanarRotation * moveInputVector;
                         _lookInputVector = cameraPlanarDirection;
 
                         // Jumping input
-                        if (inputs.JumpDown)
+                        if (inputs.jumpDown)
                         {
                             _timeSinceJumpRequested = 0f;
                             _jumpRequested = true;
@@ -227,7 +219,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         break;
                     }
@@ -243,7 +235,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         if (_lookInputVector != Vector3.zero && orientationSharpness > 0f)
                         {
@@ -275,7 +267,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         Vector3 targetMovementVelocity = Vector3.zero;
                         if (motor.GroundingStatus.IsStableOnGround)
@@ -388,7 +380,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         // Handle jump-related values
                         {
@@ -454,7 +446,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         // We can wall jump only if we are not stable on ground and are moving against an obstruction
                         if (allowWallJump && !motor.GroundingStatus.IsStableOnGround && !hitStabilityReport.IsStable)
@@ -476,7 +468,7 @@ namespace Assets.Scripts
         {
             switch (CurrentCharacterState)
             {
-                case CharacterState.Default:
+                case CharacterState.DEFAULT:
                     {
                         _internalVelocityAdd += velocity;
                         break;
