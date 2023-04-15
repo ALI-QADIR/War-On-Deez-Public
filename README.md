@@ -10,7 +10,7 @@ The game will be released shortly, but for now, you can check out the scripts in
 
 ## Preview
 
-![Sneakpeak Image for game UI and Envireonment](https://imgur.com/a/YAJ2jMa)
+![Sneakpeak Image for game UI and Envireonment](./Images/Screenshot%202023-04-15%20014524.png)
 
 ## Requirements
 
