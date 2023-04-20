@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using Cinemachine;
 
@@ -18,5 +19,16 @@ public class UITransitionManager : MonoBehaviour
         _currentCamera = targetCamera;
 
         _currentCamera.Priority++;
+    }
+
+    public void TogglePanel(GameObject panel)
+    {
+        StartCoroutine(TogglePanelCoroutine(panel));
+    }
+
+    private IEnumerator TogglePanelCoroutine(GameObject panel)
+    {
+        yield return new WaitForSeconds(0.4f);
+        panel.SetActive(!panel.activeSelf);
     }
 }
