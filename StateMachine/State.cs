@@ -8,11 +8,11 @@ namespace Assets.Scripts.StateMachine
         protected float fixedTime { get; set; }
         protected float lateTime { get; set; }
 
-        public global::Assets.Scripts.StateMachine.StateMachine stateMachine;
+        public StateMachine stateMachine;
 
-        public virtual void OnEnter(global::Assets.Scripts.StateMachine.StateMachine _stateMachine)
+        public virtual void OnEnter(StateMachine stateMachine)
         {
-            stateMachine = _stateMachine;
+            this.stateMachine = stateMachine;
         }
 
         public virtual void OnUpdate()
@@ -57,7 +57,7 @@ namespace Assets.Scripts.StateMachine
         /// <summary>
         /// Returns the Component of type <paramref name="type"/> if the game object has one attached, null if it doesn't.
         /// </summary>
-        /// <param name="type">Type of Component to retrieve./param>
+        /// <param name="type">Type of Component to retrieve.</param>
         /// <returns></returns>
         protected Component GetComponent(System.Type type)
         {

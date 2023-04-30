@@ -1,12 +1,16 @@
+using Assets.Scripts.ComboSystem;
 using UnityEngine;
 
 namespace Assets.Scripts.StateMachine
 {
     public class StateMachine : MonoBehaviour
     {
+        public string customName;
+
         public State currentState { get; private set; }
 
         private State _nextState;
+        private State _mainStateType;
 
         // Update is called once per frame
         private void Update()
@@ -61,6 +65,27 @@ namespace Assets.Scripts.StateMachine
             if (newState != null)
             {
                 _nextState = newState;
+            }
+        }
+
+        public void SetNextStateToMain()
+        {
+            _nextState = _mainStateType;
+        }
+
+        private void Awake()
+        {
+            SetNextStateToMain();
+        }
+
+        private void OnValidate()
+        {
+            if (_mainStateType == null)
+            {
+                if (customName == "Combat")
+                {
+                    _mainStateType = new IdleCombatState();
+                }
             }
         }
     }
