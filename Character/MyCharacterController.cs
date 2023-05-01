@@ -1,10 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
 using KinematicCharacterController;
 using UnityEngine;
-using System;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Character
 {
     public enum CharacterState
     {

@@ -1,11 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using KinematicCharacterController;
-using Assets.Scripts;
-using UnityEngine.TextCore.Text;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Character
 {
     public class MyPlayer : MonoBehaviour
     {
@@ -26,11 +21,14 @@ namespace Assets.Scripts
 
         private void HandleCharacterInput()
         {
-            var characterInputs = new PlayerCharacterInputs();
-            characterInputs.moveAxisForward = _inputManager.verticalInput;
-            characterInputs.moveAxisRight = _inputManager.horizontalInput;
-            characterInputs.cameraRotation = Camera.main.transform.rotation;
-            characterInputs.jumpDown = _inputManager.jumpInput;
+            var characterInputs = new PlayerCharacterInputs
+            {
+                moveAxisForward = _inputManager.verticalInput,
+                moveAxisRight = _inputManager.horizontalInput,
+                cameraRotation = Camera.main.transform.rotation,
+                jumpDown = _inputManager.jumpInput,
+                attackDown = _inputManager.attackInput
+            };
 
             character.SetInputs(ref characterInputs);
             characterManager.SetInputs(ref characterInputs);

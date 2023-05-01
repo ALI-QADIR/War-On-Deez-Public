@@ -1,4 +1,5 @@
 using Assets.Scripts.StateMachine;
+using Assets.Scripts.Character;
 using UnityEngine;
 
 namespace Assets.Scripts.ComboSystem

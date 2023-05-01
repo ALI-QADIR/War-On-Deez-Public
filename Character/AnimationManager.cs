@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Character
 {
     public class AnimationManager : MonoBehaviour
     {
