@@ -10,8 +10,8 @@ namespace Assets.Scripts.ComboSystem
             base.OnEnter(stateMachine);
 
             attackIndex = 3;
-            duration = 0.5f;
-            // TODO: set the duration to the length of the animation and play the animation
+            duration = 2.0f;
+            animator.SetTrigger("GroundFinisher");
             Debug.Log("Player attacked Ground Finisher");
         }
 

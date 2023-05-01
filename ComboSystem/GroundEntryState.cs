@@ -10,8 +10,8 @@ namespace Assets.Scripts.ComboSystem
             base.OnEnter(stateMachine);
 
             attackIndex = 1;
-            duration = 0.5f;
-            // TODO: set the duration to the length of the animation and play the animation
+            duration = 1.1f;
+            animator.SetTrigger("GroundEntry");
             Debug.Log("Player attacked Ground Entry");
         }
 
