@@ -10,7 +10,7 @@ namespace Assets.Scripts.ComboSystem
             base.OnEnter(stateMachine);
 
             attackIndex = 2;
-            duration = 1.0f;
+            duration = 0.6f;
             animator.SetTrigger("GroundCombo1");
             Debug.Log("Player attacked Ground Combo 1");
         }

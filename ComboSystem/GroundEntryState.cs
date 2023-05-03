@@ -10,7 +10,7 @@ namespace Assets.Scripts.ComboSystem
             base.OnEnter(stateMachine);
 
             attackIndex = 1;
-            duration = 1.1f;
+            duration = 0.65f;
             animator.SetTrigger("GroundEntry");
             Debug.Log("Player attacked Ground Entry");
         }
