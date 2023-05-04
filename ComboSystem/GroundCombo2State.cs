@@ -12,7 +12,7 @@ namespace Assets.Scripts.ComboSystem
             attackIndex = 2;
             duration = 0.8f;
             animator.SetTrigger("GroundCombo2");
-            Debug.Log("Player attacked Ground Combo 2");
+            // Debug.Log("Player attacked Ground Combo 2");
         }
 
         public override void OnUpdate()

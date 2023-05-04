@@ -12,7 +12,7 @@ namespace Assets.Scripts.ComboSystem
             attackIndex = 3;
             duration = 1.25f;
             animator.SetTrigger("GroundFinisher");
-            Debug.Log("Player attacked Ground Finisher");
+            // Debug.Log("Player attacked Ground Finisher");
         }
 
         public override void OnUpdate()
