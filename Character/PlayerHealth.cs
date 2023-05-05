@@ -1,3 +1,4 @@
+using UnityEngine;
 using Assets.Scripts.HealthAndDamage;
 
 namespace Assets.Scripts.Character
@@ -13,21 +14,19 @@ namespace Assets.Scripts.Character
         public override void Die()
         {
             // TODO: play Death animation call end game function
+            Debug.Log("Player Died");
         }
 
-        /// <summary>
-        /// Heals the player <paramref name="healAmount"/> amount of health.
-        /// Divide 1 by heal rate and pass it to the method.
-        /// call this method in a while loop => while(Heal(1/rate))
-        /// </summary>
-        /// <param name="healAmount"></param>
-        /// <returns>Bool, true if current health is less than max health, false otherwise.</returns>
-        public bool Heal(float healAmount)
+        public void Heal(float healAmount)
         {
-            currentHealth += healAmount;
-            if (currentHealth < maxHealth) return true;
-            currentHealth = maxHealth;
-            return false;
+            if (currentHealth + healAmount > maxHealth)
+            {
+                currentHealth = maxHealth;
+            }
+            else
+            {
+                currentHealth += healAmount;
+            }
         }
     }
 }

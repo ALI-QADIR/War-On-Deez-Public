@@ -1,5 +1,4 @@
 using Assets.Scripts.HealthAndDamage;
-using UnityEngine;
 
 namespace Assets.Scripts.Enemy
 {
@@ -7,7 +6,6 @@ namespace Assets.Scripts.Enemy
     {
         public override void Die()
         {
-            Debug.Log("Enemy died");
             BlazeAI blazeAi = GetComponent<BlazeAI>();
             if (blazeAi != null)
             {

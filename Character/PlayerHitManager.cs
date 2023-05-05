@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Character
 {
-    public class HitManager : MonoBehaviour
+    public class PlayerHitManager : MonoBehaviour
     {
         public bool isAttacking;
         [HideInInspector] public int damage = 15;

@@ -14,7 +14,7 @@ namespace Assets.Scripts.Character
 
     public class CharacterManager : MonoBehaviour
     {
-        [SerializeField] private HitManager _hitManager;
+        [SerializeField] private PlayerHitManager _hitManager;
         private MyCharacterController _character;
         private AnimationManager _animationManager;
         private StateMachine.StateMachine _meleeStateMachine;
