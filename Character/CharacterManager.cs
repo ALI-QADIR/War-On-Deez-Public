@@ -14,6 +14,7 @@ namespace Assets.Scripts.Character
 
     public class CharacterManager : MonoBehaviour
     {
+        [SerializeField] private HitManager _hitManager;
         private MyCharacterController _character;
         private AnimationManager _animationManager;
         private StateMachine.StateMachine _meleeStateMachine;
@@ -41,15 +42,27 @@ namespace Assets.Scripts.Character
             _animationManager.jumping = _character.isJumping;
 
             if (inputs.attackDown && _meleeStateMachine.currentState.GetType() == typeof(IdleCombatState))
+            {
                 _meleeStateMachine.SetNextState(new GroundEntryState());
+            }
+
+            _hitManager.isAttacking = (_meleeStateMachine.currentState.GetType() == typeof(GroundEntryState)) || (_meleeStateMachine.currentState.GetType() == typeof(GroundCombo1State)) || (_meleeStateMachine.currentState.GetType() == typeof(GroundCombo2State)) || (_meleeStateMachine.currentState.GetType() == typeof(GroundFinisherState));
         }
 
-        // Start is called before the first frame update
         private void Awake()
         {
             _character = GetComponent<MyCharacterController>();
             _animationManager = GetComponent<AnimationManager>();
             _meleeStateMachine = GetComponent<StateMachine.StateMachine>();
+
+            if (_hitManager == null)
+            {
+                Debug.LogError("Provide the sword game object to the character manager script");
+            }
+            else
+            {
+                _hitManager.damage = 15;
+            }
         }
 
         // Update is called once per frame
